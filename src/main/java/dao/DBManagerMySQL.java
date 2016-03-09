@@ -50,7 +50,7 @@ public class DBManagerMySQL {
         Boolean result = false;
         List<String> availableSchemaList = new ArrayList<>();
         List<String> availableTableList = new ArrayList<>();
-        Connection dbConnect = null;
+        Connection dbConnect;
         try {
             dbConnect = DBManagerMySQL.createConnection();
             Statement stmt = dbConnect.createStatement();
@@ -61,12 +61,13 @@ public class DBManagerMySQL {
             while (rsSchema.next()) {
                 availableSchemaList.add(rsSchema.getString(1));
             }
+            rsSchema.close();
 
             ResultSet rsTable = stmt.executeQuery(queryTable);
             while (rsTable.next()) {
                 availableTableList.add(rsTable.getString(1));
             }
-
+            rsTable.close();
             result = availableSchemaList.contains(schemaName)
                     & availableTableList.contains(tableName);
             dbConnect.close();
@@ -89,7 +90,7 @@ public class DBManagerMySQL {
      */
     public static String queryCreate(final String database,
                                      final String table) {
-        Connection dbConnect = null;
+        Connection dbConnect ;
         String result = "";
 
         try {
@@ -100,7 +101,7 @@ public class DBManagerMySQL {
             while (rs.next()) {
                 result = rs.getString(2);
             }
-
+            rs.close();
             dbConnect.close();
 
         } catch (SQLException e) {
@@ -119,8 +120,8 @@ public class DBManagerMySQL {
      */
     public static List<Field> querySelect(final String database,
                                           final String table) {
-        Connection dbConnect = null;
-        String result = "";
+        Connection dbConnect ;
+
         List<Field> fieldList = new ArrayList<>();
         try {
             dbConnect = DBManagerMySQL.createConnection();
@@ -134,7 +135,7 @@ public class DBManagerMySQL {
 
                 fieldList.add(field);
             }
-
+            rs.close();
             dbConnect.close();
 
         } catch (SQLException e) {
