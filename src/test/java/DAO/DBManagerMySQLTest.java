@@ -1,6 +1,5 @@
-package DAO;
+package dao;
 
-import dao.DBManagerMySQL;
 import entities.Field;
 import org.junit.Assert;
 import org.junit.Test;
