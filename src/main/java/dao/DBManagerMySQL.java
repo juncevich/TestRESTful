@@ -2,11 +2,7 @@ package dao;
 
 import entities.Field;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +15,7 @@ public class DBManagerMySQL {
      * Метод создает соединение с базой данных.
      * @return соединение с базой данных.
      */
-    public static Connection createConnection() {
+    static Connection createConnection() {
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -50,7 +46,7 @@ public class DBManagerMySQL {
         Boolean result = false;
         List<String> availableSchemaList = new ArrayList<>();
         List<String> availableTableList = new ArrayList<>();
-        Connection dbConnect;
+        Connection dbConnect = null;
         try {
             dbConnect = DBManagerMySQL.createConnection();
             Statement stmt = dbConnect.createStatement();
@@ -74,6 +70,14 @@ public class DBManagerMySQL {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                dbConnect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Problem to closing connection.");
+            }
+
         }
 
         return result;
@@ -90,7 +94,7 @@ public class DBManagerMySQL {
      */
     public static String queryCreate(final String database,
                                      final String table) {
-        Connection dbConnect ;
+        Connection dbConnect = null;
         String result = "";
 
         try {
@@ -106,6 +110,13 @@ public class DBManagerMySQL {
 
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            try {
+                dbConnect.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+                System.out.println("Problem to closing connection.");
+            }
         }
 
 
